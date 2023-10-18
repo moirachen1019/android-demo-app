@@ -237,20 +237,20 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
     @Override
     public void run() {
-        Bitmap resizedBitmap = Bitmap.createScaledBitmap(mBitmap, PrePostProcessor.mInputWidth, PrePostProcessor.mInputHeight, true);
-        final Tensor inputTensor = TensorImageUtils.bitmapToFloat32Tensor(resizedBitmap, PrePostProcessor.NO_MEAN_RGB, PrePostProcessor.NO_STD_RGB);
-        IValue[] outputTuple = mModule.forward(IValue.from(inputTensor)).toTuple();
-        final Tensor outputTensor = outputTuple[0].toTensor();
-        final float[] outputs = outputTensor.getDataAsFloatArray();
-        final ArrayList<Result> results =  PrePostProcessor.outputsToNMSPredictions(outputs, mImgScaleX, mImgScaleY, mIvScaleX, mIvScaleY, mStartX, mStartY);
+        // Bitmap resizedBitmap = Bitmap.createScaledBitmap(mBitmap, PrePostProcessor.mInputWidth, PrePostProcessor.mInputHeight, true);
+        // final Tensor inputTensor = TensorImageUtils.bitmapToFloat32Tensor(resizedBitmap, PrePostProcessor.NO_MEAN_RGB, PrePostProcessor.NO_STD_RGB);
+        // IValue[] outputTuple = mModule.forward(IValue.from(inputTensor)).toTuple();
+        // final Tensor outputTensor = outputTuple[0].toTensor();
+        // final float[] outputs = outputTensor.getDataAsFloatArray();
+        // final ArrayList<Result> results =  PrePostProcessor.outputsToNMSPredictions(outputs, 0, mImgScaleX, mImgScaleY, mIvScaleX, mIvScaleY, mStartX, mStartY);
 
-        runOnUiThread(() -> {
-            mButtonDetect.setEnabled(true);
-            mButtonDetect.setText(getString(R.string.detect));
-            mProgressBar.setVisibility(ProgressBar.INVISIBLE);
-            mResultView.setResults(results);
-            mResultView.invalidate();
-            mResultView.setVisibility(View.VISIBLE);
-        });
+        // runOnUiThread(() -> {
+        //     mButtonDetect.setEnabled(true);
+        //     mButtonDetect.setText(getString(R.string.detect));
+        //     mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+        //     mResultView.setResults(results);
+        //     mResultView.invalidate();
+        //     mResultView.setVisibility(View.VISIBLE);
+        // });
     }
 }
