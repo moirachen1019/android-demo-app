@@ -15,6 +15,11 @@ import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 import androidx.camera.core.ImageProxy;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+
 import org.pytorch.IValue;
 import org.pytorch.LiteModuleLoader;
 import org.pytorch.Module;
@@ -29,6 +34,7 @@ import java.util.ArrayList;
 public class ObjectDetectionActivity extends AbstractCameraXActivity<ObjectDetectionActivity.AnalysisResult> {
     private Module mModule = null;
     private ResultView mResultView;
+    private int target = 56;
 
     static class AnalysisResult {
         private final ArrayList<Result> mResults;
@@ -37,6 +43,19 @@ public class ObjectDetectionActivity extends AbstractCameraXActivity<ObjectDetec
             mResults = results;
         }
     }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        final Button buttonBack = findViewById(R.id.back2Text);
+        buttonBack.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+              final Intent intent = new Intent(ObjectDetectionActivity.this, MainActivity.class);
+              startActivity(intent);
+            }
+        });
+    }
+    
 
     @Override
     protected int getContentViewLayoutId() {
@@ -108,7 +127,7 @@ public class ObjectDetectionActivity extends AbstractCameraXActivity<ObjectDetec
         float ivScaleX = (float)mResultView.getWidth() / bitmap.getWidth();
         float ivScaleY = (float)mResultView.getHeight() / bitmap.getHeight();
 
-        final ArrayList<Result> results = PrePostProcessor.outputsToNMSPredictions(outputs, imgScaleX, imgScaleY, ivScaleX, ivScaleY, 0, 0);
+        final ArrayList<Result> results = PrePostProcessor.outputsToNMSPredictions(outputs, target, imgScaleX, imgScaleY, ivScaleX, ivScaleY, 0, 0);
         return new AnalysisResult(results);
     }
 }

@@ -37,7 +37,7 @@ public class PrePostProcessor {
     // model output is of size 25200*(num_of_class+5)
     private static int mOutputRow = 25200; // as decided by the YOLOv5 model for input image of size 640*640
     private static int mOutputColumn = 85; // left, top, right, bottom, score and 80 class probability
-    private static float mThreshold = 0.30f; // score above which a detection is generated
+    private static float mThreshold = 0.5f; // score above which a detection is generated
     private static int mNmsLimit = 15;
 
     static String[] mClasses;
@@ -116,7 +116,7 @@ public class PrePostProcessor {
         return intersectionArea / (areaA + areaB - intersectionArea);
     }
 
-    static ArrayList<Result> outputsToNMSPredictions(float[] outputs, float imgScaleX, float imgScaleY, float ivScaleX, float ivScaleY, float startX, float startY) {
+    static ArrayList<Result> outputsToNMSPredictions(float[] outputs, int target, float imgScaleX, float imgScaleY, float ivScaleX, float ivScaleY, float startX, float startY) {
         ArrayList<Result> results = new ArrayList<>();
         for (int i = 0; i< mOutputRow; i++) {
             if (outputs[i* mOutputColumn +4] > mThreshold) {
@@ -139,6 +139,9 @@ public class PrePostProcessor {
                     }
                 }
 
+                // if (cls != target) { // not the target class
+                //     continue;
+                // }
                 Rect rect = new Rect((int)(startX+ivScaleX*left), (int)(startY+top*ivScaleY), (int)(startX+ivScaleX*right), (int)(startY+ivScaleY*bottom));
                 Result result = new Result(cls, outputs[i*mOutputColumn+4], rect);
                 results.add(result);
